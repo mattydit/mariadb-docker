@@ -1,0 +1,10 @@
+CHANGE MASTER TO
+  MASTER_HOST='db1',
+  MASTER_USER='replication_user',
+  MASTER_PASSWORD='replsecret',
+  MASTER_PORT=3306,
+  MASTER_CONNECT_RETRY=10;
+
+
+CREATE USER 'maxscale'@'%' IDENTIFIED BY 'secret';
+GRANT ALL PRIVILEGES ON *.* TO 'maxscale'@'%';

@@ -1,0 +1,100 @@
+version: '3'
+volumes:
+  data:
+services:
+  db1:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: nation
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - data:/var/lib/mysql
+      - ./config/primarycnf:/etc/mysql/conf.d
+      - ./primaryinit:/docker-entrypoint-initdb.d
+      - ./log-files-primary:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    working_dir: /var/lib/mysql
+
+  db-replica-1:
+      image: mariadb
+      environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: nation
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+      volumes:
+        - data:/var/lib/mysql
+        - ./config/secondary-1:/etc/mysql/conf.d
+        - ./secondaryinit:/docker-entrypoint-initdb.d
+        - ./log-files-secondary-1:/var/lib/mysql
+      ports:
+        - "3307:3307"
+      working_dir: /var/lib/mysql
+      depends_on:
+        - db1
+
+  db-replica-2:
+      image: mariadb
+      environment:
+        MYSQL_ROOT_PASSWORD: password
+        MYSQL_DATABASE: nation
+        MYSQL_USER: user
+        MYSQL_PASSWORD: password
+      volumes:
+        - data:/var/lib/mysql
+        - ./config/secondary-2:/etc/mysql/conf.d
+        - ./secondaryinit:/docker-entrypoint-initdb.d
+        - ./log-files-secondary-2:/var/lib/mysql
+      ports:
+        - "3308:3308"
+      working_dir: /var/lib/mysql
+      depends_on:
+        - db1
+  
+  maxscale:
+    image: mariadb/maxscale
+    ports:
+      - 4006:4006
+      - 4008:4008
+      - 8989:8989
+    volumes:
+      - ./config/maxscalecnf/maxscale.cnf:/etc/maxscale.cnf.d/maxscale.cnf
+    restart: always
+
+
+  # db2:
+  #   image: mariadb
+  #   restart: always
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: example
+
+  # db3:
+  #   image: mariadb
+  #   restart: always
+  #   environment:
+  #     MARIADB_ROOT_PASSWORD: example
+
+  # postgres:
+  #   image: postgres
+  #   restart: always
+  #   environment:
+  #     POSTGRES_PASSWORD: example
+  #   ports:
+  #     - 5401:5432
+      
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+        
+  # api:
+  #   build: ./FlaskNBA
+  #   restart: always
+  #   ports:
+  #     - 5001:5001
+  #   depends_on:
+  #     - db1
