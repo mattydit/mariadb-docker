@@ -1,0 +1,1 @@
+A Docker MariaDB Master and Slave setup with Maxscale
