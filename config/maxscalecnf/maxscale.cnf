@@ -2,21 +2,21 @@
 ## Server list
 ########################
 
-[mariadb1]
+[db1]
 type            = server
 address         = db1
 port            = 3306
 protocol        = MariaDBBackend
 serv_weight     = 1
 
-[mariadb2]
+[db-replica-1]
 type            = server
 address         = db-replica-1
 port            = 3307
 protocol        = MariaDBBackend
 serv_weight     = 1
 
-[mariadb3]
+[db-replica-2]
 type            = server
 address         = db-replica-2
 port            = 3308
@@ -40,9 +40,9 @@ syslog                  = 1
 [monitor]
 type                    = monitor
 module                  = mariadbmon
-servers                 = mariadb1,mariadb2,mariadb3
+servers                 = db1,db-replica-1,db-replica-2
 user                    = maxscale
-password                = secret
+password                = password
 auto_failover           = true
 auto_rejoin             = true
 enforce_read_only_slaves = 1
@@ -54,9 +54,9 @@ enforce_read_only_slaves = 1
 [rw-service]
 type            = service
 router          = readwritesplit
-servers         = mariadb1,mariadb2,mariadb3
+servers         = db1,db-replica-1,db-replica-2
 user            = maxscale
-password        = secret
+password        = password
 max_slave_connections           = 100%
 max_sescmd_history              = 1500
 causal_reads                    = true
@@ -71,10 +71,10 @@ max_slave_replication_lag       = 3
 [rr-service]
 type            = service
 router          = readconnroute
-servers         = mariadb1,mariadb2,mariadb3
+servers         = db1,db-replica-1,db-replica-2
 router_options  = slave
 user            = maxscale
-password        = secret
+password        = password
 
 ##########################
 ## Listener definitions for the service

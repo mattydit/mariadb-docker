@@ -56,13 +56,13 @@ services:
   
   maxscale:
     image: mariadb/maxscale
+    tty: true
     ports:
       - 4006:4006
       - 4008:4008
       - 8989:8989
     volumes:
       - ./config/maxscalecnf/maxscale.cnf:/etc/maxscale.cnf.d/maxscale.cnf
-    restart: always
 
 
   # db2:
