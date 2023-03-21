@@ -62,7 +62,11 @@ services:
       - 4008:4008
       - 8989:8989
     volumes:
-      - ./config/maxscalecnf/maxscale.cnf:/etc/maxscale.cnf.d/maxscale.cnf
+      - ./config/maxscalecnf/maxscale.cnf:/etc/maxscale.cnf
+    depends_on:
+      - db1
+      - db-replica-1
+      - db-replica-2
 
 
   # db2:

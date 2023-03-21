@@ -7,21 +7,18 @@ type            = server
 address         = db1
 port            = 3306
 protocol        = MariaDBBackend
-serv_weight     = 1
 
 [db-replica-1]
 type            = server
 address         = db-replica-1
 port            = 3307
 protocol        = MariaDBBackend
-serv_weight     = 1
 
 [db-replica-2]
 type            = server
 address         = db-replica-2
 port            = 3308
 protocol        = MariaDBBackend
-serv_weight     = 1
 
 #########################
 ## MaxScale configuration
@@ -43,35 +40,22 @@ module                  = mariadbmon
 servers                 = db1,db-replica-1,db-replica-2
 user                    = maxscale
 password                = password
-auto_failover           = true
-auto_rejoin             = true
-enforce_read_only_slaves = 1
 
 #########################
 ## Service definitions for read/write splitting and read-only services.
 #########################
 
-[rw-service]
+[Read-Write-Service]
 type            = service
 router          = readwritesplit
 servers         = db1,db-replica-1,db-replica-2
 user            = maxscale
 password        = password
-max_slave_connections           = 100%
-max_sescmd_history              = 1500
-causal_reads                    = true
-causal_reads_timeout            = 10
-transaction_replay              = true
-transaction_replay_max_size     = 1Mi
-delayed_retry                   = true
-master_reconnection             = true
-master_failure_mode             = fail_on_write
-max_slave_replication_lag       = 3
 
-[rr-service]
+[Read-Only-Service]
 type            = service
 router          = readconnroute
-servers         = db1,db-replica-1,db-replica-2
+servers         = db-replica-1,db-replica-2
 router_options  = slave
 user            = maxscale
 password        = password
@@ -81,14 +65,14 @@ password        = password
 ## Listeners represent the ports the service will listen on.
 ##########################
 
-[rw-listener]
+[Read-Write-Listener]
 type            = listener
-service         = rw-service
+service         = Read-Write-Service
 protocol        = MariaDBClient
 port            = 4008
 
-[ro-listener]
+[Read-Only-Listener]
 type            = listener
-service         = rr-service
+service         = Read-Only-Service
 protocol        = MariaDBClient
 port            = 4006
