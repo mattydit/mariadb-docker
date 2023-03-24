@@ -5,3 +5,8 @@ log-basename=my-mariadb         # used to be independent of hostname changes
 replicate_do_db=nation      # replicate only this DB
 #binlog-format=MIXED            #default 
 port=3307
+
+[mysqld]
+ssl-ca=/certs/ca-cert.pem
+ssl-cert=/certs/server-cert.pem
+ssl-key=/certs/server-key.pem

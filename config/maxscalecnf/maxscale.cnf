@@ -7,18 +7,30 @@ type            = server
 address         = db1
 port            = 3306
 protocol        = MariaDBBackend
+ssl           = true
+ssl_cert      = /certs/server-cert.pem
+ssl_key       = /certs/server-key.pem
+ssl_ca_cert   = /certs/ca-cert.pem
 
 [db-replica-1]
 type            = server
 address         = db-replica-1
 port            = 3307
 protocol        = MariaDBBackend
+ssl           = true
+ssl_cert      = /certs/server-cert.pem
+ssl_key       = /certs/server-key.pem
+ssl_ca_cert   = /certs/ca-cert.pem
 
 [db-replica-2]
 type            = server
 address         = db-replica-2
 port            = 3308
 protocol        = MariaDBBackend
+ssl           = true
+ssl_cert      = /certs/server-cert.pem
+ssl_key       = /certs/server-key.pem
+ssl_ca_cert   = /certs/ca-cert.pem
 
 #########################
 ## MaxScale configuration
@@ -79,3 +91,13 @@ type            = listener
 service         = Read-Only-Service
 protocol        = MariaDBClient
 port            = 4006
+
+[Read-Write-Listener-SSL]
+type            = listener
+service         = Read-Write-Service
+protocol        = MariaDBClient
+port            = 4009
+ssl           = true
+ssl_cert      = /certs/server-cert.pem
+ssl_key       = /certs/server-key.pem
+ssl_ca_cert   = /certs/ca-cert.pem

@@ -4,3 +4,8 @@ server_id=3000                  # used to uniquely identify the server
 log-basename=my-mariadb         # used to be independent of hostname changes 
                                 # (otherwise name is <datadir>/mysql-bin)
 #binlog-format=MIXED            #default 
+
+[mysqld]
+ssl-ca=/certs/ca-cert.pem
+ssl-cert=/certs/server-cert.pem
+ssl-key=/certs/server-key.pem

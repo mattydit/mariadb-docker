@@ -14,6 +14,7 @@ services:
       - ./config/primarycnf:/etc/mysql/conf.d
       - ./primaryinit:/docker-entrypoint-initdb.d
       - ./log-files-primary:/var/lib/mysql
+      - ./certs:/certs
     ports:
       - "3306:3306"
     working_dir: /var/lib/mysql
@@ -30,6 +31,7 @@ services:
         - ./config/secondary-1:/etc/mysql/conf.d
         - ./secondaryinit:/docker-entrypoint-initdb.d
         - ./log-files-secondary-1:/var/lib/mysql
+        - ./certs:/certs
       ports:
         - "3307:3307"
       working_dir: /var/lib/mysql
@@ -48,6 +50,7 @@ services:
         - ./config/secondary-2:/etc/mysql/conf.d
         - ./secondaryinit:/docker-entrypoint-initdb.d
         - ./log-files-secondary-2:/var/lib/mysql
+        - ./certs:/certs
       ports:
         - "3308:3308"
       working_dir: /var/lib/mysql
@@ -60,9 +63,11 @@ services:
     ports:
       - 4006:4006
       - 4008:4008
+      - 4009:4009
       - 8989:8989
     volumes:
       - ./config/maxscalecnf/maxscale.cnf:/etc/maxscale.cnf
+      - ./certs_maxscale:/certs
     depends_on:
       - db1
       - db-replica-1
