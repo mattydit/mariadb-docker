@@ -5,3 +5,4 @@ log-basename=my-mariadb         # used to be independent of hostname changes
 replicate_do_db=nation      # replicate only this DB
 #binlog-format=MIXED            #default 
 port=3307
+read_only=ON
